@@ -9,7 +9,7 @@ export interface IAiTheme {
 export const aiTheme: IAiTheme[] = [
   {
     id: 1,
-    name: "Noyi",
+    name: "Rona",
     image:
       "https://res.cloudinary.com/dknvsbuyy/image/upload/v1685678135/chat_1_c7eda483e3.png",
     primary: "#FFC107",
@@ -17,7 +17,7 @@ export const aiTheme: IAiTheme[] = [
   },
   {
     id: 2,
-    name: "Pogu",
+    name: "Cody",
     image:
       "https://res.cloudinary.com/dknvsbuyy/image/upload/v1685709886/image_21_2e18bb4a61.png",
     primary: "#E53057",
@@ -25,7 +25,7 @@ export const aiTheme: IAiTheme[] = [
   },
   {
     id: 3,
-    name: "Nista",
+    name: "Oreo",
     image:
       "https://res.cloudinary.com/dknvsbuyy/image/upload/v1685709886/image_22_409561b953.png",
     primary: "#3B96D2",
@@ -33,7 +33,7 @@ export const aiTheme: IAiTheme[] = [
   },
   {
     id: 4,
-    name: "Estor",
+    name: "Zepp",
     image:
       "https://res.cloudinary.com/dknvsbuyy/image/upload/v1685709886/image_18_893d24cebc.png",
     primary: "#37474F",
@@ -41,7 +41,7 @@ export const aiTheme: IAiTheme[] = [
   },
   {
     id: 5,
-    name: "Pega",
+    name: "Walter",
     image:
       "https://res.cloudinary.com/dknvsbuyy/image/upload/v1685709886/image_23_211d7370cb.png",
     primary: "#2473FE",

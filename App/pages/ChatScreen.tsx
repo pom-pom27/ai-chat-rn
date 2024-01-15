@@ -1,35 +1,49 @@
 import axios from "axios";
-import { useCallback, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { marked } from "marked";
+import { useCallback, useEffect, useState } from "react";
+import { StyleSheet, ToastAndroid, View } from "react-native";
 import "react-native-get-random-values";
 import { GiftedChat, IMessage } from "react-native-gifted-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import WebView from "react-native-webview";
 import { v4 as uuidv4 } from "uuid";
 import { INavScreen } from "../Navigation";
-import { getBardApi } from "../api";
+import { getBardApi, resetSignal } from "../api";
 import { useMessagesStore } from "../state";
 
-interface ValidationError {
+export interface ValidationError {
   message: string;
   errors: Record<string, string[]>;
 }
+
+export const showToast = (title: string) => {
+  ToastAndroid.showWithGravity(title, ToastAndroid.SHORT, ToastAndroid.TOP);
+};
+
+const me = {
+  _id: 2,
+};
 
 const ChatScreen = ({ route: { params } }: INavScreen) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const messages = useMessagesStore((state) => state.messages);
   const addMessages = useMessagesStore((state) => state.addMessage);
+  const resetMessages = useMessagesStore((state) => state.resetMessage);
 
   const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    return () => {
+      resetMessages();
+      resetSignal();
+    };
+  }, []);
 
   const ai = {
     _id: 1,
     name: params?.theme.name!,
     avatar: params?.theme.image!,
-  };
-
-  const me = {
-    _id: 2,
   };
 
   const aiInitMsgFake = () => {
@@ -80,8 +94,6 @@ const ChatScreen = ({ route: { params } }: INavScreen) => {
 
     const aiResponse = await getAiResponse(messages[0].text);
 
-    console.log("aiResponse", aiResponse);
-
     if (aiResponse) {
       const chatMsg: IMessage[] = [
         {
@@ -110,7 +122,7 @@ const ChatScreen = ({ route: { params } }: INavScreen) => {
       return textFromAI;
     } catch (error) {
       if (axios.isAxiosError<ValidationError, Record<string, unknown>>(error)) {
-        // console.log(error.message);
+        showToast(error.message);
       } else {
         // console.error(error);
       }
@@ -134,6 +146,15 @@ const ChatScreen = ({ route: { params } }: INavScreen) => {
       <GiftedChat
         isTyping={isLoading}
         messages={messages}
+        renderMessage={(message) => {
+          const mark = marked.parse(message.currentMessage?.text ?? "");
+          return (
+            <WebView
+              originWhitelist={["*"]}
+              source={{ html: mark as string }}
+            />
+          );
+        }}
         onSend={(messages) => onSend(messages)}
         user={me}
       />
@@ -142,7 +163,7 @@ const ChatScreen = ({ route: { params } }: INavScreen) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "gray" },
+  container: { flex: 1, backgroundColor: "white" },
 });
 
 export default ChatScreen;
