@@ -1,11 +1,9 @@
 import axios from "axios";
-import { marked } from "marked";
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, ToastAndroid, View } from "react-native";
 import "react-native-get-random-values";
 import { GiftedChat, IMessage } from "react-native-gifted-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import WebView from "react-native-webview";
 import { v4 as uuidv4 } from "uuid";
 import { INavScreen } from "../Navigation";
 import { getBardApi, resetSignal } from "../api";
@@ -146,15 +144,7 @@ const ChatScreen = ({ route: { params } }: INavScreen) => {
       <GiftedChat
         isTyping={isLoading}
         messages={messages}
-        renderMessage={(message) => {
-          const mark = marked.parse(message.currentMessage?.text ?? "");
-          return (
-            <WebView
-              originWhitelist={["*"]}
-              source={{ html: mark as string }}
-            />
-          );
-        }}
+       
         onSend={(messages) => onSend(messages)}
         user={me}
       />
